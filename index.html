@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Legacy Web Compatibility Auditor Pro — IE11 / Edge IEモード 互換性リスク確認ツール</title>
+<meta name="description" content="IE11 / Edge IEモード 互換性リスク候補をローカルで検出。AI API不要・外部送信なし・ローカル実行。Python製CLIツール。">
+<style>
+:root {
+  --bg: #0d1117;
+  --card: #161b22;
+  --border: #30363d;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --accent: #58a6ff;
+  --accent2: #3fb950;
+  --warn: #d29922;
+  --btn: #238636;
+  --btn-hover: #2ea043;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  font-size: 16px;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Header */
+header {
+  background: #010409;
+  border-bottom: 1px solid var(--border);
+  padding: 48px 24px 40px;
+  text-align: center;
+}
+.product-label {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 12px;
+  margin-bottom: 20px;
+}
+header h1 {
+  font-size: clamp(24px, 4vw, 42px);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: var(--text);
+  margin-bottom: 14px;
+  line-height: 1.2;
+}
+.catch {
+  font-size: clamp(16px, 2.5vw, 22px);
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.sub {
+  font-size: 15px;
+  color: var(--muted);
+  margin-bottom: 32px;
+}
+.cta-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 28px;
+}
+.btn-primary {
+  display: inline-block;
+  background: var(--btn);
+  color: #fff;
+  font-size: 17px;
+  font-weight: 700;
+  padding: 13px 32px;
+  border-radius: 8px;
+  border: 1px solid #2ea04380;
+  transition: background .15s;
+}
+.btn-primary:hover { background: var(--btn-hover); text-decoration: none; }
+.price-tag {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent2);
+}
+.sample-link {
+  font-size: 14px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+}
+
+/* Badges */
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 8px;
+}
+.badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #21262d;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.badge-green { border-color: #238636; color: var(--accent2); background: #0d1f12; }
+.badge-blue  { border-color: #1f6feb; color: var(--accent); background: #0d1525; }
+
+/* Main */
+main { max-width: 960px; margin: 0 auto; padding: 48px 24px 80px; }
+section { margin-bottom: 56px; }
+h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Screenshots */
+.screenshots {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+.screenshot-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.screenshot-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-bottom: 1px solid var(--border);
+}
+.screenshot-card .cap {
+  font-size: 13px;
+  color: var(--muted);
+  padding: 10px 14px;
+}
+
+/* Features */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+.feature-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+}
+.feature-card code {
+  display: inline-block;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 13px;
+  background: #21262d;
+  color: var(--accent);
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+.feature-card p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* IE mode notice */
+.ie-notice {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--warn);
+  border-radius: 8px;
+  padding: 20px 24px;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.ie-notice strong { color: var(--text); }
+
+/* Disclaimers */
+.disclaimers {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 24px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+.disclaimers li { margin-left: 18px; }
+
+/* CTA bottom */
+.cta-bottom {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 36px 24px;
+  text-align: center;
+}
+.cta-bottom h2 { border: none; margin-bottom: 8px; }
+.cta-bottom p { color: var(--muted); margin-bottom: 24px; font-size: 14px; }
+
+/* Footer */
+footer {
+  background: #010409;
+  border-top: 1px solid var(--border);
+  padding: 24px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="product-label">BOOTH 販売中</div>
+  <h1>Legacy Web Compatibility Auditor Pro</h1>
+  <p class="catch">IE11 / Edge IEモード 互換性リスク候補をローカルで検出</p>
+  <p class="sub">AI API不要・外部送信なし・ローカル実行</p>
+
+  <div class="cta-group">
+    <a class="btn-primary" href="https://legacy-web-tools.booth.pm/items/8494116" target="_blank" rel="noopener">
+      BOOTH で購入する
+    </a>
+    <span class="price-tag">¥9,800</span>
+  </div>
+  <div style="margin-bottom:20px">
+    <a class="sample-link" href="./sample_report.html">→ サンプル HTML レポートを見る</a>
+  </div>
+
+  <div class="badges">
+    <span class="badge badge-green">No AI API</span>
+    <span class="badge badge-green">No External Upload</span>
+    <span class="badge badge-green">No DRM</span>
+    <span class="badge badge-green">No Online Auth</span>
+    <span class="badge badge-blue">Python Local PC</span>
+    <span class="badge badge-blue">Windows Verified</span>
+    <span class="badge badge-blue">dependencies = []</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- Screenshots -->
+  <section>
+    <h2>実行画面サンプル</h2>
+    <div class="screenshots">
+      <div class="screenshot-card">
+        <img src="./screenshots/overview.png" alt="self-test 実行結果">
+        <div class="cap">self-test 実行結果（動作確認）</div>
+      </div>
+      <div class="screenshot-card">
+        <img src="./screenshots/scan_summary.png" alt="scan コマンド サマリー">
+        <div class="cap">scan コマンド — サマリー</div>
+      </div>
+      <div class="screenshot-card">
+        <img src="./screenshots/findings.png" alt="scan コマンド 検出一覧">
+        <div class="cap">scan コマンド — 検出一覧</div>
+      </div>
+      <div class="screenshot-card">
+        <img src="./screenshots/html_report.png" alt="HTML 監査レポート">
+        <div class="cap">HTML 監査レポート（ブラウザ表示）</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IE mode notice -->
+  <section>
+    <h2>Edge IEモードについて</h2>
+    <div class="ie-notice">
+      <p><strong>Microsoft Edge の IEモード</strong>は、Microsoftより少なくとも2029年までサポートされると案内されています。</p>
+      <br>
+      <p>本ページでは、移行・改修・棚卸し前の一次チェック用途として、本ツールのサンプルレポートと実行画面を紹介します。</p>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section>
+    <h2>主な機能</h2>
+    <div class="features">
+      <div class="feature-card">
+        <code>scan</code>
+        <p>IE11 / Edge IEモード 非互換リスク候補をターミナルに出力します。</p>
+      </div>
+      <div class="feature-card">
+        <code>audit-html</code>
+        <p>スキャン結果を自己完結型 HTML レポートとして生成します。</p>
+      </div>
+      <div class="feature-card">
+        <code>compat-report</code>
+        <p>互換性スコアと改善価値レポートを生成します。</p>
+      </div>
+      <div class="feature-card">
+        <code>patch-dry-run</code>
+        <p>AIの提案パッチを適用前にプレビューして安全確認します。</p>
+      </div>
+      <div class="feature-card">
+        <code>patch-apply-copy</code>
+        <p>元プロジェクトを変更せずコピーにパッチを適用します。</p>
+      </div>
+      <div class="feature-card">
+        <code>self-test</code>
+        <p>インストール後の動作確認を自動実行します。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA bottom -->
+  <section>
+    <div class="cta-bottom">
+      <h2>BOOTH で購入する</h2>
+      <p>ダウンロード販売 / Python 3.10以上 / 追加ライブラリ不要（dependencies = []）</p>
+      <div class="cta-group">
+        <a class="btn-primary" href="https://legacy-web-tools.booth.pm/items/8494116" target="_blank" rel="noopener">
+          購入ページへ — ¥9,800
+        </a>
+        <a href="./sample_report.html">サンプルレポートを見る</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Disclaimers -->
+  <section>
+    <div class="disclaimers">
+      <ul>
+        <li>本製品は Microsoft 公式・認定・提携製品ではありません。</li>
+        <li>本ツールは互換性リスク確認支援ツールです。実際の表示結果や動作を完全に保証するものではありません。</li>
+        <li>「IE11」「Edge IEモード」は Microsoft Corporation の製品・商標です。</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  &copy; Legacy Web Compatibility Auditor Pro —
+  <a href="https://legacy-web-tools.booth.pm/items/8494116" target="_blank" rel="noopener">BOOTH</a>
+</footer>
+
+</body>
+</html>
