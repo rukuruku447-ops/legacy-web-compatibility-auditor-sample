@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>IE Auditor HTML Audit Report</title>
+<style>
+:root { --bg:#f7f7f8; --card:#fff; --line:#d7d7db; --text:#1f2328; --muted:#666; }
+body { margin:0; font-family:Arial, Helvetica, sans-serif; background:var(--bg); color:var(--text); }
+header { padding:28px 32px; background:#20242c; color:white; }
+h1 { margin:0 0 6px; font-size:26px; }
+main { max-width:1200px; margin:24px auto; padding:0 18px 40px; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px; margin:16px 0; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+.grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:12px; }
+.metric { border:1px solid var(--line); border-radius:8px; padding:12px; background:#fbfbfc; }
+.metric strong { display:block; font-size:26px; }
+.chip { display:inline-block; margin:4px 6px 4px 0; padding:6px 9px; border-radius:999px; background:#eef0f4; border:1px solid var(--line); }
+table { border-collapse:collapse; width:100%; font-size:13px; }
+th, td { border:1px solid var(--line); padding:8px; vertical-align:top; }
+th { background:#eef0f4; text-align:left; }
+.num { text-align:right; }
+code { white-space:pre-wrap; }
+.status-accepted { background:#fff4e5; }
+.status-ignored { background:#eef8ee; color:#334; }
+.status-fixed { background:#e9f5ff; }
+.status-todo, .status-unreviewed { background:#fff; }
+.small { color:var(--muted); font-size:13px; }
+a { color:#005fb8; }
+</style>
+</head>
+<body>
+<header>
+<h1>IE Auditor HTML Audit Report</h1>
+<div>IE Auditor v1.0.1 / target=ie11 / mode=rule-based-lightweight</div>
+</header>
+<main>
+<section class="card grid">
+  <div class="metric"><span>Compatibility score</span><strong>5</strong><span class="small">very-high-risk</span></div>
+  <div class="metric"><span>Risk score</span><strong>98</strong></div>
+  <div class="metric"><span>Visible / raw findings</span><strong>13 / 13</strong></div>
+  <div class="metric"><span>Hidden / filtered</span><strong>0</strong></div>
+  <div class="metric"><span>Reviewed / unreviewed</span><strong>0 / 13</strong></div>
+  <div class="metric"><span>Scanned files</span><strong>3</strong></div>
+</section>
+<section class="card">
+<h2>Beginner decision</h2>
+<p><strong>audit-only first: fix critical/high items in a copy or staging folder, then rescan</strong></p>
+<p class="small">Score is deterministic and local. It is meant for triage, not a guarantee that IE mode is perfect.</p>
+</section>
+<section class="card">
+<h2>First actions</h2>
+<ol><li>Fix or explicitly review the critical/high priority findings first.</li>
+<li>Transpile or rewrite legacy-breaking JavaScript syntax before layout polish.</li>
+<li>Use the Windows kit screenshots to decide which layout warnings are real issues.</li>
+<li>Import accepted/ignored/fixed review results so future scans become less noisy.</li></ol>
+</section>
+<section class="card">
+<h2>Counts</h2>
+<p><strong>Priority:</strong> <span class="chip"><strong>critical</strong>: 1</span>
+<span class="chip"><strong>high</strong>: 9</span>
+<span class="chip"><strong>medium</strong>: 3</span></p>
+<p><strong>Severity:</strong> <span class="chip"><strong>error</strong>: 1</span>
+<span class="chip"><strong>warn</strong>: 12</span></p>
+<p><strong>Review:</strong> <span class="chip"><strong>unreviewed</strong>: 13</span></p>
+<p><strong>Category:</strong> <span class="chip"><strong>syntax</strong>: 4</span>
+<span class="chip"><strong>bundle</strong>: 1</span>
+<span class="chip"><strong>polyfill</strong>: 3</span>
+<span class="chip"><strong>layout</strong>: 5</span></p>
+<p><strong>Fix difficulty:</strong> <span class="chip"><strong>low</strong>: 4</span>
+<span class="chip"><strong>medium</strong>: 8</span>
+<span class="chip"><strong>high</strong>: 1</span></p>
+<p><strong>AI suitability:</strong> <span class="chip"><strong>good-with-review</strong>: 4</span>
+<span class="chip"><strong>possible-with-human-review</strong>: 3</span>
+<span class="chip"><strong>review-first</strong>: 5</span>
+<span class="chip"><strong>human-led</strong>: 1</span></p>
+</section>
+<section class="card">
+<h2>Top findings</h2>
+<table>
+<thead><tr><th>priority</th><th>score</th><th>review</th><th>rule</th><th>location</th><th>severity</th><th>confidence</th><th>difficulty</th><th>change risk</th><th>AI fit</th><th>evidence</th><th>recommended action / explanation</th></tr></thead>
+<tbody>
+<tr class="status-unreviewed"><td>critical</td><td class="num">98</td><td>unreviewed</td><td>js-for-of</td><td>app.js:3</td><td>error</td><td>high</td><td>low</td><td>low</td><td>good-with-review</td><td><code>for (const id of ids) { console.log(id); }</code></td><td>Fix first: transpile to ES5 or rewrite this syntax before IE/legacy release.<br><span class="small">for...of loop: IE cannot parse for...of loops. Suggested direction: Transpile loops or rewrite with a classic index loop for legacy output.</span></td></tr>
+<tr class="status-unreviewed"><td>high</td><td class="num">72</td><td>unreviewed</td><td>html-module-script</td><td>index.html:5</td><td>warn</td><td>high</td><td>high</td><td>high</td><td>human-led</td><td><code>&lt;script type=module src=&quot;modern.js&quot;&gt;&lt;/script&gt;</code></td><td>Ship a non-module legacy bundle and verify that IE mode loads it.<br><span class="small">ES module script: Module scripts are ignored by IE and unsupported by old Edge. Suggested direction: Ship a transpiled non-module bundle for legacy targets.</span></td></tr>
+<tr class="status-unreviewed"><td>high</td><td class="num">67</td><td>unreviewed</td><td>css-grid</td><td>index.html:7</td><td>warn</td><td>high</td><td>medium</td><td>medium</td><td>review-first</td><td><code>.cards { display: grid; }</code></td><td>Check the page in IE mode and add a simpler layout/style fallback if the screen breaks.<br><span class="small">CSS Grid layout: IE/old Edge support for CSS Grid is incomplete and often needs fallbacks. Suggested direction: Add a flexbox/block fallback or keep the IE layout simpler.</span></td></tr>
+<tr class="status-unreviewed"><td>high</td><td class="num">67</td><td>unreviewed</td><td>css-sticky</td><td>index.html:8</td><td>warn</td><td>high</td><td>medium</td><td>medium</td><td>review-first</td><td><code>.sticky { position: sticky; }</code></td><td>Check the page in IE mode and add a simpler layout/style fallback if the screen breaks.<br><span class="small">position: sticky: IE does not support sticky positioning. Suggested direction: Use static/fixed positioning for IE or accept a simpler layout.</span></td></tr>
+<tr class="status-unreviewed"><td>high</td><td class="num">67</td><td>unreviewed</td><td>css-display-contents</td><td>index.html:13</td><td>warn</td><td>high</td><td>medium</td><td>medium</td><td>review-first</td><td><code>&lt;div style=&quot;display: contents&quot;&gt;x&lt;/div&gt;</code></td><td>Check the page in IE mode and add a simpler layout/style fallback if the screen breaks.<br><span class="small">display: contents: display: contents is not safe for IE/old Edge layouts and accessibility behavior. Suggested direction: Use normal wrapper elements or add a simpler fallback display value.</span></td></tr>
+<tr class="status-unreviewed"><td>high</td><td class="num">67</td><td>unreviewed</td><td>css-is-where</td><td>style.css:1</td><td>warn</td><td>high</td><td>medium</td><td>medium</td><td>review-first</td><td><code>:where(.btn) { color:red; }</code></td><td>Check the page in IE mode and add a simpler layout/style fallback if the screen breaks.<br><span class="small">:is() / :where() selector: Modern selector helpers are unavailable in IE and old Edge. Suggested direction: Expand the selector list manually for legacy targets.</span></td></tr>
+<tr class="status-unreviewed"><td>high</td><td class="num">67</td><td>unreviewed</td><td>css-object-fit</td><td>style.css:2</td><td>warn</td><td>high</td><td>medium</td><td>medium</td><td>review-first</td><td><code>.hero { object-fit: cover; }</code></td><td>Check the page in IE mode and add a simpler layout/style fallback if the screen breaks.<br><span class="small">object-fit: IE does not support object-fit on images/videos. Suggested direction: Use background-size fallback or avoid relying on object-fit.</span></td></tr>
+<tr class="status-unreviewed"><td>high</td><td class="num">65</td><td>unreviewed</td><td>js-let-const</td><td>app.js:2</td><td>warn</td><td>medium</td><td>low</td><td>low</td><td>good-with-review</td><td><code>const ids = Array.from(document.querySelectorAll(&quot;.x&quot;));</code></td><td>Fix first: transpile to ES5 or rewrite this syntax before IE/legacy release.<br><span class="small">let/const declaration: IE has poor support for block scoped declarations. Suggested direction: Transpile to ES5 or use var in legacy-only code.</span></td></tr>
+<tr class="status-unreviewed"><td>high</td><td class="num">65</td><td>unreviewed</td><td>js-let-const</td><td>app.js:3</td><td>warn</td><td>medium</td><td>low</td><td>low</td><td>good-with-review</td><td><code>for (const id of ids) { console.log(id); }</code></td><td>Fix first: transpile to ES5 or rewrite this syntax before IE/legacy release.<br><span class="small">let/const declaration: IE has poor support for block scoped declarations. Suggested direction: Transpile to ES5 or use var in legacy-only code.</span></td></tr>
+<tr class="status-unreviewed"><td>high</td><td class="num">65</td><td>unreviewed</td><td>js-let-const</td><td>index.html:16</td><td>warn</td><td>medium</td><td>low</td><td>low</td><td>good-with-review</td><td><code>const data = Object.assign({}, window.state);</code></td><td>Fix first: transpile to ES5 or rewrite this syntax before IE/legacy release.<br><span class="small">let/const declaration: IE has poor support for block scoped declarations. Suggested direction: Transpile to ES5 or use var in legacy-only code.</span></td></tr>
+</tbody>
+</table>
+</section>
+<section class="card">
+<h2>Hidden / filtered findings</h2>
+<p class="small">These findings were found in the raw scan but hidden from priority totals by the active noise profile. They are grouped here so repeated wiki/generated layout noise does not bury useful signals.</p>
+<p><strong>Low/info-only guidance:</strong> Hidden low/info findings are usually review-only candidates, not immediate fix requests. If visible findings are 0 and hidden findings are only info-level CSS layout candidates, verify a few representative pages instead of editing generated/wiki output.</p>
+<p><strong>Top hidden rules:</strong> <span class="chip">none</span></p>
+<table>
+<thead><tr><th>rule</th><th>count</th><th>why hidden</th><th>severity</th><th>confidence</th><th>files</th><th>representative examples</th><th>recommended action</th></tr></thead>
+<tbody>
+<tr><td colspan="8">No hidden/filtered findings.</td></tr>
+</tbody>
+</table>
+<p class="small">Grouped view shows representative examples only. Use JSON for the complete raw list.</p>
+</section>
+<section class="card">
+<h2>Windows verification</h2>
+<p>Store screenshots in <code>screenshots/</code>. If this report is inside a Windows kit, open that folder to attach before/after screenshots to your review notes.</p>
+<p class="small">This HTML is generated without external libraries or network assets.</p>
+</section>
+</main>
+</body>
+</html>
