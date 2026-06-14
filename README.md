@@ -1,7 +1,17 @@
 # Legacy Web Compatibility Auditor Pro — Sample
 
 > **購入前の動作確認用サンプルページです。**
-> 製品本体は [BOOTH 商品ページ](https://booth.pm/ja/items/8494116) からご購入いただけます。
+> 製品本体は [BOOTH 商品ページ](https://legacy-web-tools.booth.pm/items/8494116) からご購入いただけます。
+
+---
+
+## リンク
+
+| | URL |
+|---|---|
+| 🌐 製品紹介ページ（GitHub Pages） | https://rukuruku447-ops.github.io/legacy-web-compatibility-auditor-sample/ |
+| 🛒 BOOTH 販売ページ ¥9,800 | https://legacy-web-tools.booth.pm/items/8494116 |
+| 📝 Qiita 記事 | https://qiita.com/Legacy_Web_Tools/items/dfaec015499491e13d69 |
 
 ---
 
@@ -73,11 +83,11 @@ py -m ie_auditor audit-html ./my_project --target ie11 --out report.html
 
 ## 製品購入
 
-**BOOTH 商品ページ** → [https://booth.pm/ja/items/8494116](https://booth.pm/ja/items/8494116)
+**BOOTH 商品ページ** → [https://legacy-web-tools.booth.pm/items/8494116](https://legacy-web-tools.booth.pm/items/8494116)
 
 ---
 
 ## ライセンス
 
 このサンプルリポジトリ自体は閲覧・共有自由です。
-製品本体のコード・ドキュメントの再配布は禁止です（[BOOTH 商品ページ](https://booth.pm/ja/items/8494116) の利用規約をご確認ください）。
+製品本体のコード・ドキュメントの再配布は禁止です（[BOOTH 商品ページ](https://legacy-web-tools.booth.pm/items/8494116) の利用規約をご確認ください）。
